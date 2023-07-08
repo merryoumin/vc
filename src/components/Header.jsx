@@ -8,38 +8,52 @@ function Header() {
     console.log("isOpen:", isOpen);
   }, [isOpen]);
 
-  const handleClick = () => {
-    setIsOpen(!isOpen);
-  };
-
   const onlongclick = ($target, duration, callback) => {
     let timer;
+    let isLongClick = false;
 
     $target.onmousedown = () => {
-      timer = setTimeout(callback, duration);
+      timer = setTimeout(() => {
+        isLongClick = true;
+      }, duration);
     };
 
     $target.onmouseup = () => {
       clearTimeout(timer);
+      if (!isLongClick) {
+        handleClick();
+      }
+      isLongClick = false;
     };
 
     $target.ontouchstart = () => {
-      timer = setTimeout(callback, duration);
+      timer = setTimeout(() => {
+        isLongClick = true;
+      }, duration);
     };
 
     $target.ontouchend = () => {
       clearTimeout(timer);
+      if (!isLongClick) {
+        handleClick();
+      }
+      isLongClick = false;
     };
   };
 
   const handleLongClick = () => {
     alert("work");
   };
+  const handleClick = () => {
+    if (!isOpen) {
+      setIsOpen(true);
+    }
+  };
 
   return (
     <div className="m-8">
       <div className="flex justify-center">
-        <div onClick={handleClick}>
+        <div>
           <button
             ref={(button) => onlongclick(button, 1500, handleLongClick)}
             className="circle pulse text-center"
