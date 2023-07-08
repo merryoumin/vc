@@ -1,31 +1,43 @@
 import React, { useState, useEffect, useRef } from "react";
-
-function Header() {
+import { useLocation, Link, useNavigate } from "react-router-dom";
+function Header({ account, setAccount, connect }) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
-  const [account, setAccount] = useState("");
 
-  const connect = async () => {
-    if (window.ethereum) {
-      try {
-        const res = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
+  let location = useLocation();
+  const navigate = useNavigate();
 
-        setAccount(res[0]);
-        localStorage.setItem("address", res[0]);
-      } catch (err) {
-        console.error(err);
+  function checkLogin() {
+    if (!account) {
+      if (
+        localStorage.getItem("address") == "" ||
+        localStorage.getItem("address") == null ||
+        localStorage.getItem("address") == undefined
+      ) {
+        navigate("/");
+        alert("Please connect to MetaMask");
+      } else {
+        setAccount(localStorage.getItem("address"));
       }
-    } else {
-      console.log("Install metamask");
-      alert("Install metamask");
     }
-  };
+  }
 
   useEffect(() => {
-    console.log("isOpen:", isOpen);
-  }, [isOpen]);
+    if (
+      location.pathname == "/vote" ||
+      location.pathname == "/about" ||
+      location.pathname == "/contact"
+    ) {
+      checkLogin();
+      // console.log(location.pathname);
+    }
+  }, [location]);
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsOpen(false);
+    }
+  }, []);
 
   const onlongclick = ($target, duration, callback) => {
     let timer;
@@ -70,6 +82,7 @@ function Header() {
       localStorage.clear();
       setAccount("");
       alert("Disconnect to MetaMask");
+      navigate("/");
     }
   };
   const handleClick = () => {
@@ -81,54 +94,65 @@ function Header() {
   };
   return (
     <div className="m-8">
-      <div className="flex justify-center">
-        <div>
-          <button
-            className="circle pulse text-center"
-            onClick={handleClick}
-            ref={(button) =>
-              button && onlongclick(button, 1500, handleLongClick)
-            }
+      <div className="flex justify-center ">
+        <div className="justify-center">
+          <div className=" text-center justify-center">
+            <button
+              className="circle pulse text-center"
+              onClick={handleClick}
+              ref={(button) =>
+                button && onlongclick(button, 1500, handleLongClick)
+              }
+            >
+              {account && (
+                <div className="flex justify-center items-center text-zinc-700">
+                  {account.substring(0, 2)}..
+                  {account.substring(account.length - 2)}
+                </div>
+              )}
+            </button>
+          </div>
+          <div
+            className=" m-11 text-4xl text-teal-300"
+            style={{ fontFamily: "logo" }}
           >
-            {account && (
-              <div className="flex items-center">
-                {account.substring(0, 2)}..
-                {account.substring(account.length - 2)}
-              </div>
-            )}
-          </button>
+            <a href="/">VOTE CHAIN</a>
+          </div>
         </div>
       </div>
       {isOpen && (
         <div
           ref={menuRef}
-          className="fixed bottom-12 right-0 left-0 bg-white overflow-auto p-4 shadow-2xl"
+          className="fixed bottom-12 right-0 left-0   rounded-full  overflow-auto p-4 shadow-2xl"
         >
           <nav>
             <ul className="flex flex-col justify-between space-y-6 text-gray-600 p-5">
               <li>
-                <a
-                  href="#"
-                  className="flex items-center justify-center block p-2 rounded-md hover:bg-teal-200 transition-all duration-200 animate-pulse"
+                <Link
+                  to="/vote"
+                  style={{ fontFamily: "text" }}
+                  className="flex items-center justify-center block p-2 rounded-full hover:bg-teal-200 rounded-full transition-all duration-200 animate-pulse"
                 >
-                  home
-                </a>
+                  Vote
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
-                  className="flex items-center justify-center block p-2 rounded-md hover:bg-teal-200 transition-all duration-200 animate-pulse"
+                <Link
+                  to="/about"
+                  style={{ fontFamily: "text" }}
+                  className="flex items-center justify-center block p-2 rounded-full hover:bg-teal-200 transition-all duration-200 animate-pulse"
                 >
                   About
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
-                  className="flex items-center justify-center block p-2 rounded-md hover:bg-teal-200 transition-all duration-200 animate-pulse"
+                <Link
+                  to="/contact"
+                  style={{ fontFamily: "text" }}
+                  className="flex items-center justify-center block p-2 rounded-full hover:bg-teal-200 transition-all duration-200 animate-pulse"
                 >
                   Contact
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
