@@ -13,23 +13,27 @@ function Header() {
   };
 
   const onlongclick = ($target, duration, callback) => {
-    $target.onmousedown = () => {
-      const timer = setTimeout(callback, duration);
+    let timer;
 
-      $target.onmouseup = () => {
-        clearTimeout(timer);
-        alert("work");
-      };
+    $target.onmousedown = () => {
+      timer = setTimeout(callback, duration);
+    };
+
+    $target.onmouseup = () => {
+      clearTimeout(timer);
     };
 
     $target.ontouchstart = () => {
-      const timer = setTimeout(callback, duration);
-
-      $target.ontouchend = () => {
-        clearTimeout(timer);
-        alert("work2");
-      };
+      timer = setTimeout(callback, duration);
     };
+
+    $target.ontouchend = () => {
+      clearTimeout(timer);
+    };
+  };
+
+  const handleLongClick = () => {
+    alert("work");
   };
 
   return (
@@ -37,7 +41,7 @@ function Header() {
       <div className="flex justify-center">
         <div onClick={handleClick}>
           <button
-            onClick={onlongclick}
+            ref={(button) => onlongclick(button, 1000, handleLongClick)}
             className="circle pulse text-center"
           ></button>
         </div>
