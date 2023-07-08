@@ -60,12 +60,16 @@ function VoteCreate() {
                 icons={{
                   checked: (
                     <div className="ont justify-start text-center">
-                      <ToggleLabel className="ON">Election Vote</ToggleLabel>
+                      <ToggleLabel className="ON text">
+                        Election Vote
+                      </ToggleLabel>
                     </div>
                   ),
                   unchecked: (
                     <div className="offt text-center">
-                      <ToggleLabel className="OFF">Against Vote</ToggleLabel>
+                      <ToggleLabel className="OFF text">
+                        Against Vote
+                      </ToggleLabel>
                     </div>
                   ),
                 }}

@@ -57,16 +57,16 @@ input {
 }
 
 .btmSum {
-  background-color: #9af8e2 !important;
   box-shadow: 0 1px 1px rgba(127, 126, 126, 0.24) !important;
   border: 0px !important;
-  color: #9a9a9a !important;
-  font-weight: bold !important;
-}
-.btmSum:hover {
   background-color: #f4f4f4 !important;
   color: #6ad1b9 !important;
   font-weight: bold !important;
+}
+.btmSum:hover {
+  color: #9a9a9a !important;
+  font-weight: bold !important;
+  background-color: #9af8e2 !important;
 }
 .ont {
   margin-top: 4px;
