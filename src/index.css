@@ -18,6 +18,26 @@
   font-style: normal;
 }
 
+textarea {
+  width: 300px;
+  height: 100px;
+  border-radius: 20px;
+  box-shadow: 0 1px 1px rgba(127, 126, 126, 0.24);
+  border: 1px solid #cccccc95;
+  padding: 15px !important;
+  resize: none;
+}
+
+input {
+  border: none;
+  border-radius: 20px;
+  height: 45px;
+  width: 300px;
+  padding: 15px !important;
+  box-shadow: 0 1px 1px rgba(127, 126, 126, 0.24);
+  border: 1px solid #cccccc95;
+}
+
 .card {
   width: 350px;
   height: 400px;
