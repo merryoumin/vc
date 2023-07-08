@@ -37,6 +37,49 @@ input {
   box-shadow: 0 1px 1px rgba(127, 126, 126, 0.24);
   border: 1px solid #cccccc95;
 }
+.react-toggle-track {
+  width: 292px !important;
+  height: 40px !important;
+  padding: 0;
+  border-radius: 30px;
+}
+.react-toggle-thumb {
+  width: 38px !important;
+  height: 38px !important;
+  border: 0px !important;
+  box-shadow: 0 4px 3px rgba(127, 126, 126, 0.24) !important;
+}
+.react-toggle--checked .react-toggle-track {
+  background-color: #c6ebe3 !important;
+}
+.react-toggle-track {
+  background-color: #9af8e2 !important;
+}
+.ont {
+  margin-top: 4px;
+  margin-left: 85px;
+}
+.OFF {
+  margin-top: 4px;
+  margin-right: 85px !important;
+}
+.offt {
+  display: grid !important;
+  justify-content: end;
+  justify-items: stretch;
+  justify-self: end !important;
+}
+
+.dhtcPe {
+  background-color: rgb(247 247 247) !important;
+}
+.react-toggle--checked .react-toggle-thumb {
+  left: 254px !important;
+  border-color: #66ffe8 !important;
+}
+.react-toggle--checked:hover:not(.react-toggle--disabled) .react-toggle-track {
+  background-color: #a7fffdb8 !important;
+}
 
 .card {
   width: 350px;
