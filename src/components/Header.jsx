@@ -99,20 +99,21 @@ function Header({ account, setAccount, connect }) {
               ref={(button) =>
                 button && onlongclick(button, 1500, handleLongClick)
               }
-            >
-              {account && (
-                <div className="flex justify-center items-center text-zinc-700">
-                  {account.substring(0, 2)}..
-                  {account.substring(account.length - 2)}
-                </div>
-              )}
-            </button>
+            ></button>
           </div>
-          <div
-            className=" m-11 text-4xl text-teal-300"
-            style={{ fontFamily: "logo" }}
-          >
-            <a href="/">VOTE CHAIN</a>
+          <div>
+            <div
+              className=" m-11 text-4xl text-teal-300"
+              style={{ fontFamily: "logo" }}
+            >
+              <a href="/">VOTE CHAIN</a>
+            </div>
+            {account && (
+              <div className="flex  items-start justify-center  text-zinc-700">
+                {account.substring(0, 4)}...
+                {account.substring(account.length - 4)}
+              </div>
+            )}
           </div>
         </div>
       </div>
