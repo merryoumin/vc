@@ -23,11 +23,7 @@ function Header({ account, setAccount, connect }) {
   }
 
   useEffect(() => {
-    if (
-      location.pathname == "/vote" ||
-      location.pathname == "/about" ||
-      location.pathname == "/contact"
-    ) {
+    if (location.pathname == "/vote") {
       checkLogin();
       // console.log(location.pathname);
     }
