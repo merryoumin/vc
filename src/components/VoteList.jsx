@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from "react";
 import VoteListAll from "./VoteListAll";
 import VoteListByMe from "./VoteListByMe";
+import Card from "./Card";
 
 function VoteList({ account }) {
   return (
     <div>
-      VoteList
-      <div>1</div>
-      <div>1</div> <div>1</div> <div>1</div> <div>1</div> <div>1</div>{" "}
-      <div>1</div> <div>1</div> <div>1</div> <div>1</div> <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
       <VoteListAll account={account} />
       <VoteListByMe account={account} />
+      <Card
+        frontContent={<div>Front of Card 1</div>}
+        backContent={<div>Back of Card 1</div>}
+      />
+      <Card
+        frontContent={<div>Front of Card 2</div>}
+        backContent={<div>Back of Card 2</div>}
+      />
     </div>
   );
 }
