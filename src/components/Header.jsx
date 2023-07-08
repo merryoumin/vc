@@ -18,6 +18,7 @@ function Header() {
 
       $target.onmouseup = () => {
         clearTimeout(timer);
+        alert("work");
       };
     };
 
@@ -26,6 +27,7 @@ function Header() {
 
       $target.ontouchend = () => {
         clearTimeout(timer);
+        alert("work2");
       };
     };
   };
