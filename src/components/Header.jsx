@@ -3,6 +3,24 @@ import React, { useState, useEffect, useRef } from "react";
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
+  const [accounts, setAccount] = useState("");
+
+  const connect = async () => {
+    if (window.ethereum) {
+      try {
+        const res = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+
+        setAccount(res[0]);
+        localStorage.setItem("wallet_address", res[0]);
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      console.log("Install metamask");
+    }
+  };
 
   useEffect(() => {
     console.log("isOpen:", isOpen);
@@ -44,7 +62,8 @@ function Header() {
   };
 
   const handleLongClick = () => {
-    alert("work");
+    alert("connect to MetaMask");
+    connect();
   };
   const handleClick = () => {
     if (!isOpen) {
