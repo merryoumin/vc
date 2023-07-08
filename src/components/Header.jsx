@@ -63,8 +63,7 @@ function Header() {
   };
 
   const handleLongClick = () => {
-    alert("connect to MetaMask");
-    connect();
+    alert("work");
   };
   const handleClick = () => {
     if (!isOpen) {
