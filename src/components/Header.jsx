@@ -15,6 +15,7 @@ function Header() {
     $target.onmousedown = () => {
       timer = setTimeout(() => {
         isLongClick = true;
+        callback();
       }, duration);
     };
 
@@ -29,6 +30,7 @@ function Header() {
     $target.ontouchstart = () => {
       timer = setTimeout(() => {
         isLongClick = true;
+        callback(); // Call the `handleLongClick` function when long press occurs
       }, duration);
     };
 
@@ -47,16 +49,21 @@ function Header() {
   const handleClick = () => {
     if (!isOpen) {
       setIsOpen(true);
+    } else {
+      setIsOpen(false);
     }
+    console.log("isOpen:", isOpen);
   };
-
   return (
     <div className="m-8">
       <div className="flex justify-center">
         <div>
           <button
-            ref={(button) => onlongclick(button, 1500, handleLongClick)}
             className="circle pulse text-center"
+            onClick={handleClick}
+            ref={(button) =>
+              button && onlongclick(button, 1500, handleLongClick)
+            }
           ></button>
         </div>
       </div>
