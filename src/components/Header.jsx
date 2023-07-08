@@ -19,6 +19,7 @@ function Header() {
       }
     } else {
       console.log("Install metamask");
+      alert("Install metamask");
     }
   };
 
