@@ -49,7 +49,7 @@ function Header() {
     $target.ontouchstart = () => {
       timer = setTimeout(() => {
         isLongClick = true;
-        callback(); // Call the `handleLongClick` function when long press occurs
+        callback();
       }, duration);
     };
 
@@ -66,7 +66,6 @@ function Header() {
     if (!account) {
       alert("Connect to MetaMask");
       connect();
-      console.log("account handleLongClick" + account);
     } else {
       localStorage.clear();
       setAccount("");
@@ -79,7 +78,6 @@ function Header() {
     } else {
       setIsOpen(false);
     }
-    console.log("isOpen:", isOpen);
   };
   return (
     <div className="m-8">
