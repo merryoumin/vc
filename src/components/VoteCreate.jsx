@@ -108,6 +108,15 @@ function VoteCreate() {
               </div>
             )}
           </Desc>
+          <div>
+            <div className="text-center mt-8 mb-4">투표 기간</div>
+            <input type="date" name="endTime" />
+          </div>
+          <input
+            type="submit"
+            value="Submit"
+            className="text-center btmSum  h-14 mt-12 mb-4"
+          />
         </form>
       </div>
     </div>
