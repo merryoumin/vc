@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
-  const [accounts, setAccount] = useState("");
+  const [account, setAccount] = useState("");
 
   const connect = async () => {
     if (window.ethereum) {
@@ -13,7 +13,7 @@ function Header() {
         });
 
         setAccount(res[0]);
-        localStorage.setItem("wallet_address", res[0]);
+        localStorage.setItem("address", res[0]);
       } catch (err) {
         console.error(err);
       }
@@ -63,7 +63,15 @@ function Header() {
   };
 
   const handleLongClick = () => {
-    alert("work");
+    if (!account) {
+      alert("Connect to MetaMask");
+      connect();
+      console.log("account handleLongClick" + account);
+    } else {
+      localStorage.clear();
+      setAccount("");
+      alert("Disconnect to MetaMask");
+    }
   };
   const handleClick = () => {
     if (!isOpen) {
@@ -83,7 +91,14 @@ function Header() {
             ref={(button) =>
               button && onlongclick(button, 1500, handleLongClick)
             }
-          ></button>
+          >
+            {account && (
+              <div className="flex items-center">
+                {account.substring(0, 2)}..
+                {account.substring(account.length - 2)}
+              </div>
+            )}
+          </button>
         </div>
       </div>
       {isOpen && (
