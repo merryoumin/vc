@@ -21,10 +21,10 @@ function Card({ frontContent, backContent }) {
 
   return (
     <div className={`card ${isFlipped ? "flipped" : ""}`} {...swipeHandlers}>
-      <div className="card-front">
+      <div className="card-front ">
         <div className="card-content">{frontContent}</div>
       </div>
-      <div className="card-back">
+      <div className="card-back ">
         <div className="card-content">{backContent}</div>
       </div>
     </div>
