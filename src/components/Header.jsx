@@ -120,7 +120,7 @@ function Header({ account, setAccount, connect }) {
       {isOpen && (
         <div
           ref={menuRef}
-          className="fixed bottom-12 right-0 left-0   rounded-full  overflow-auto p-4 shadow-2xl"
+          className="menu-container  bg-white fixed bottom-12 right-0 left-0   rounded-full  overflow-auto p-4 shadow-2xl"
         >
           <nav>
             <ul className="flex flex-col justify-between space-y-6 text-gray-600 p-5">

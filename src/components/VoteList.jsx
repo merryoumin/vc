@@ -6,6 +6,16 @@ function VoteList({ account }) {
   return (
     <div>
       VoteList
+      <div>1</div>
+      <div>1</div> <div>1</div> <div>1</div> <div>1</div> <div>1</div>{" "}
+      <div>1</div> <div>1</div> <div>1</div> <div>1</div> <div>1</div>
+      <div>1</div>
+      <div>1</div>
+      <div>1</div>
+      <div>1</div>
+      <div>1</div>
+      <div>1</div>
+      <div>1</div>
       <VoteListAll account={account} />
       <VoteListByMe account={account} />
     </div>
