@@ -41,7 +41,7 @@ function Header() {
       <div className="flex justify-center">
         <div onClick={handleClick}>
           <button
-            ref={(button) => onlongclick(button, 500, handleLongClick)}
+            ref={(button) => onlongclick(button, 1000, handleLongClick)}
             className="circle pulse text-center"
           ></button>
         </div>
