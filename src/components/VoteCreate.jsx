@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Toggle from "react-toggle";
 import "react-toggle/style.css";
 import styled from "styled-components";
@@ -41,6 +41,12 @@ function VoteCreate() {
     updatedCandidates[index] = value;
     setCandidates(updatedCandidates);
   };
+
+  useEffect(() => {
+    if (isOn) {
+      setCandidates(["", ""]);
+    }
+  }, [isOn]);
 
   return (
     <div className="w-screen flex flex-col justify-center items-center">
