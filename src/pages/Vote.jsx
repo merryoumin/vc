@@ -43,7 +43,7 @@ function Vote({ account }) {
           </button>
         </div>
       </div>
-      <div className=" w-screen  h-screen  flex items-start justify-center bg-gray-50 p-4">
+      <div className=" w-screen   flex items-start justify-center bg-gray-50 p-4">
         {showList && <VoteList account={account} />}
         {showCreate && <VoteCreate account={account} />}
       </div>

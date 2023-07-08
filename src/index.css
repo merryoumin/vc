@@ -56,6 +56,10 @@ input {
   background-color: #9af8e2 !important;
 }
 
+.alrm {
+  width: 300px;
+}
+
 .btmSum {
   box-shadow: 0 1px 1px rgba(127, 126, 126, 0.24) !important;
   border: 0px !important;

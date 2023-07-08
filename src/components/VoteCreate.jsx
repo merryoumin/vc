@@ -49,7 +49,7 @@ function VoteCreate() {
   }, [isOn]);
 
   return (
-    <div className="w-screen flex flex-col justify-center items-center">
+    <div className="w-screen border-8 border-gray-100  flex flex-col justify-center items-center">
       <div>
         <form>
           <div className="mt-10">
@@ -116,10 +116,14 @@ function VoteCreate() {
             <div className="text-center mt-8 mb-4">투표 기간</div>
             <input type="date" name="endTime" />
           </div>
+          <div className="alrm p-5 mt-10  bg-white rounded-3xl">
+            한번 만드신 투표는 수정 될 수 없습니다. 또 한 투표의 모든 내용은
+            체인에 올라갑니다. 투표 생성 시에 주의 하시고 생성하시기 바랍니다.
+          </div>
           <input
             type="submit"
             value="Submit"
-            className="text-center btmSum  h-14 mt-12 mb-4"
+            className="text-center btmSum mt-20 h-14 mb-10  mb-4"
           />
         </form>
       </div>
