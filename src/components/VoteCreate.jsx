@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Toggle from "react-toggle";
 import "react-toggle/style.css";
 import styled from "styled-components";
+import { SHA256, enc } from "crypto-js";
 
 const ToggleContainer = styled.div`
   display: flex;
@@ -21,7 +22,7 @@ const ToggleLabel = styled.span`
   width: 100px;
 `;
 
-function VoteCreate() {
+function VoteCreate({ account }) {
   const [isOn, setIsOn] = useState(false);
   const [candidates, setCandidates] = useState(["", ""]);
 
@@ -42,16 +43,44 @@ function VoteCreate() {
     setCandidates(updatedCandidates);
   };
 
+  async function sendPoll(e) {
+    e.preventDefault();
+    let allPoll;
+    const data = new FormData(e.target);
+    let hash = SHA256(allPoll).toString(enc.Hex);
+
+    const title = data.get("title");
+    const context = data.get("context");
+    const endTime = data.get("endTime");
+    let election = [];
+
+    allPoll = title + context + endTime + account;
+
+    if (isOn == true) {
+      election = [0, ...Array.from(data.getAll("election"))];
+      allPoll = title + context + endTime + account + election;
+    }
+
+    // try {
+    //   await contract.methods
+    //     .makeANewPoll(title, context, 0, elective, time, canVoted)
+    //     .send({ from: account, to: CONTRACT_ADDRESS });
+    // } catch (error) {
+    //   console.error(error);
+    // }
+  }
+
   useEffect(() => {
     if (isOn) {
       setCandidates(["", ""]);
     }
+    console.log(isOn);
   }, [isOn]);
 
   return (
     <div className="w-screen border-8 border-gray-100  flex flex-col justify-center items-center">
       <div>
-        <form>
+        <form onSubmit={sendPoll}>
           <div className="mt-10">
             <ToggleContainer onClick={toggleHandler}>
               <Toggle
@@ -86,7 +115,7 @@ function VoteCreate() {
           <div>
             <div className="text-center mt-8 mb-4">투표 내용</div>
             <textarea
-              name="contant"
+              name="context"
               className="mt-2"
               placeholder="투표에 대한 설명을 적어주세요."
             />
