@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
 import Toggle from "react-toggle";
+import axios from "axios";
+import Web3 from "web3";
+
 import "react-toggle/style.css";
 import styled from "styled-components";
+
+import React, { useState, useEffect } from "react";
 import { SHA256, enc } from "crypto-js";
-import axios from "axios";
 import { CONTRACT_ABI, CONTRACT_ADDRESS } from "../web3.config";
-import Web3 from "web3";
 
 const web3 = new Web3(window.ethereum);
 const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
@@ -66,10 +68,10 @@ function VoteCreate({ account }) {
   }
 
   async function setPoll() {
-    console.log("setPoll");
-    console.log(account);
-    console.log(vid);
-    console.log(hash);
+    // console.log("setPoll");
+    // console.log(account);
+    // console.log(vid);
+    // console.log(hash);
     try {
       await contract.methods
         .makePoll(account, vid, hash)
