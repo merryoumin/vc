@@ -3,6 +3,7 @@ import Card from "./Card";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { GoCheckCircle, GoCircle, GoCircleSlash } from "react-icons/go";
+import { FaThumbsDown, FaThumbsUp } from "react-icons/fa";
 
 function VoteList({ account }) {
   const [vote, setVote] = useState([]);
@@ -68,7 +69,14 @@ function VoteList({ account }) {
                 <div className="mt-4">
                   {vote[index].typeOfVote === 0 && (
                     <div className=" flex justify-center items-center">
-                      <div className="flex justify-center w-28 items-center"></div>
+                      <div className="flex justify-center w-28 items-center">
+                        <div className="m-6">
+                          <FaThumbsUp className="text-6xl hover:text-teal-300 text-white" />
+                        </div>
+                        <div className="m-6">
+                          <FaThumbsDown className="text-6xl hover:text-teal-300 text-white" />
+                        </div>
+                      </div>
                     </div>
                   )}
                   {vote[index].typeOfVote === 1 && (
@@ -87,7 +95,7 @@ function VoteList({ account }) {
                           </select>
                           <input
                             type="submit"
-                            value="Submit"
+                            value="VOTE"
                             className="text-center  w-20 ml-3 btmSum h-14 "
                           />
                         </div>
@@ -98,6 +106,9 @@ function VoteList({ account }) {
                   <div className="mt-2 text-center">{vote[index].context}</div>
                   <div className="mt-2 text-center">
                     {new Date(vote[index].endTime).toLocaleString()}
+                    <div className="mt-2 text-xs">
+                      한번 투표 하신 투표는 수정 될 수 없습니다.
+                    </div>
                   </div>
                 </div>
               </div>
