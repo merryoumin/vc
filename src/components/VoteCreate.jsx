@@ -83,7 +83,7 @@ function VoteCreate({ account }) {
       console.log(typeOfVote);
       console.log(election);
       alert("Complete");
-      // window.location.href = "/";
+      window.location.href = "/";
     } catch (error) {
       console.error(error);
     }
@@ -173,7 +173,7 @@ function VoteCreate({ account }) {
             <input type="date" name="endTime" />
           </div>
           <div className="alrm p-5 mt-10  bg-white rounded-3xl">
-            한번 만드신 투표는 수정 될 수 없습니다. 또 한 투표의 모든 내용은
+            한번 만드신 투표는 수정 될 수 없습니다. 또한 투표의 모든 내용은
             체인에 올라갑니다. 투표 생성 시에 주의 하시고 생성하시기 바랍니다.
           </div>
           <input

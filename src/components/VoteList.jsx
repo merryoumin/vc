@@ -53,9 +53,9 @@ function VoteList({ account }) {
                 <div className="cardContext_title text-center text-2xl">
                   {vote[index].title}
                 </div>
-                <div className="mt-4">
+                <div className="mt-4  text-center">
                   <div>{vote[index].context}</div>
-                  <div className="mt-2">
+                  <div className="mt-2  text-center">
                     {new Date(vote[index].endTime).toLocaleString()}
                   </div>
                 </div>
