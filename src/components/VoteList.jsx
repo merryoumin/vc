@@ -61,9 +61,45 @@ function VoteList({ account }) {
               </div>
             ),
             backContent: (
-              <div>
-                Back of Card {index + 1}
-                <input type="radio" />
+              <div className="cardContext items-center justify-center">
+                <div className="cardContext_title text-center text-2xl">
+                  {vote[index].title}
+                </div>
+                <div className="mt-4">
+                  {vote[index].typeOfVote === 0 && (
+                    <div className=" flex justify-center items-center">
+                      <div className="flex justify-center w-28 items-center"></div>
+                    </div>
+                  )}
+                  {vote[index].typeOfVote === 1 && (
+                    <div className="flex justify-center items-center ">
+                      <div className=" justify-center w-28 items-center">
+                        {vote[index].election.map((option, optionIndex) => (
+                          <div key={optionIndex} className="flex items-center">
+                            <input
+                              className="radio"
+                              type="radio"
+                              id={`option-${optionIndex}`}
+                              name={`vote-${index}`}
+                              value={option}
+                            />
+                            <label
+                              htmlFor={`option-${optionIndex}`}
+                              className="ml-2"
+                            >
+                              {option}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div>{vote[index].context}</div>
+                  <div className="mt-2">
+                    {new Date(vote[index].endTime).toLocaleString()}
+                  </div>
+                </div>
               </div>
             ),
           }))
