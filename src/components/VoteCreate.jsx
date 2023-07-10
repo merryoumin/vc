@@ -4,6 +4,11 @@ import "react-toggle/style.css";
 import styled from "styled-components";
 import { SHA256, enc } from "crypto-js";
 import axios from "axios";
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from "../web3.config";
+import Web3 from "web3";
+
+const web3 = new Web3(window.ethereum);
+const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
 
 const ToggleContainer = styled.div`
   display: flex;
@@ -26,6 +31,10 @@ const ToggleLabel = styled.span`
 function VoteCreate({ account }) {
   const [isOn, setIsOn] = useState(false);
   const [candidates, setCandidates] = useState(["", ""]);
+  const [check, setCheck] = useState(0);
+  const [voteId, setVoteId] = useState([]);
+  const [vid, setVid] = useState();
+  const [hash, setHash] = useState();
 
   const toggleHandler = () => {
     setIsOn(!isOn);
@@ -44,12 +53,38 @@ function VoteCreate({ account }) {
     setCandidates(updatedCandidates);
   };
 
+  async function getvoteId() {
+    try {
+      const response = await axios.get(`/api/vote`);
+      setVoteId(response.data.vote);
+      console.log(response.data.vote);
+      console.log(voteId);
+      setVid(voteId[voteId.length - 1].id);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function setPoll() {
+    console.log("setPoll");
+    console.log(account);
+    console.log(vid);
+    console.log(hash);
+    try {
+      await contract.methods
+        .makePoll(account, vid, hash)
+        .send({ from: account, to: CONTRACT_ADDRESS });
+      setCheck(0);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async function sendPoll(e) {
     e.preventDefault();
     let allPoll;
     let response;
     const data = new FormData(e.target);
-    let hash = SHA256(allPoll).toString(enc.Hex);
 
     const title = data.get("title");
     const context = data.get("context");
@@ -59,6 +94,9 @@ function VoteCreate({ account }) {
     const endTime = dateObject.toISOString();
 
     let election = [];
+    let electionCount = [];
+    let prosCount = [];
+    let consCount = [];
 
     let typeOfVote = 0;
 
@@ -79,23 +117,30 @@ function VoteCreate({ account }) {
         account,
         election,
         typeOfVote,
+        electionCount,
+        prosCount,
+        consCount,
       });
-      console.log(typeOfVote);
-      console.log(election);
-      alert("Complete");
-      window.location.href = "/";
+      setHash("0x" + SHA256(allPoll).toString(enc.Hex));
+      setCheck(1);
+      window.location.href = "/vote";
     } catch (error) {
       console.error(error);
     }
-
-    // try {
-    //   await contract.methods
-    //     .makeANewPoll(title, context, 0, elective, time, canVoted)
-    //     .send({ from: account, to: CONTRACT_ADDRESS });
-    // } catch (error) {
-    //   console.error(error);
-    // }
   }
+  useEffect(() => {
+    if (check == 1) {
+      console.log("check 1" + check);
+      getvoteId();
+    } else if (check == 2) {
+      console.log("check 2" + check);
+      setPoll();
+    }
+  }, [check]);
+
+  useEffect(() => {
+    setCheck(2);
+  }, [vid]);
 
   useEffect(() => {
     if (isOn) {
