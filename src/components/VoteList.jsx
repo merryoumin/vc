@@ -72,31 +72,31 @@ function VoteList({ account }) {
                     </div>
                   )}
                   {vote[index].typeOfVote === 1 && (
-                    <div className="flex justify-center items-center ">
-                      <div className=" justify-center w-28 items-center">
-                        {vote[index].election.map((option, optionIndex) => (
-                          <div key={optionIndex} className="flex items-center">
-                            <input
-                              className="radio"
-                              type="radio"
-                              id={`option-${optionIndex}`}
-                              name={`vote-${index}`}
-                              value={option}
-                            />
-                            <label
-                              htmlFor={`option-${optionIndex}`}
-                              className="ml-2"
-                            >
-                              {option}
-                            </label>
-                          </div>
-                        ))}
+                    <form>
+                      <div className="flex justify-center items-center">
+                        <div className=" justify-center items-center">
+                          <select
+                            className="select  w-32 h-10 bg-teal-100 rounded-xl  text-center"
+                            id={`vote-${index}`}
+                          >
+                            {vote[index].election.map((option, optionIndex) => (
+                              <option key={optionIndex} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            type="submit"
+                            value="Submit"
+                            className="text-center  w-20 ml-3 btmSum h-14 "
+                          />
+                        </div>
                       </div>
-                    </div>
+                    </form>
                   )}
 
-                  <div>{vote[index].context}</div>
-                  <div className="mt-2">
+                  <div className="mt-2 text-center">{vote[index].context}</div>
+                  <div className="mt-2 text-center">
                     {new Date(vote[index].endTime).toLocaleString()}
                   </div>
                 </div>
