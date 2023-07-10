@@ -51,23 +51,18 @@ function VoteList({ account }) {
   }
 
   async function sendVoteA(e) {
-    //   e.preventDefault();
-    //   const data = new FormData(e.target);
-    //   const title_a = data.get("title_a");
-    //   const context_a = data.get("context_a");
-    //   const endTime_a = data.get("endTime_a");
-    //   let time = Unix_timestampConv(endTime_a);
-    //   console.log(time);
-    //   let canVoted_a = Array.from(data.getAll("regardingUsers_a"));
-    //   let elective_a = [0, ...Array.from(data.getAll("elective_a"))];
-    //   console.log(elective_a);
-    //   try {
-    //     await contract.methods
-    //       .makeANewPoll(title_a, context_a, 1, elective_a, time, canVoted_a)
-    //       .send({ from: account, to: CONTRACT_ADDRESS });
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
+    e.preventDefault();
+    const data = new FormData(e.target);
+    const voteId = data.get("voteId");
+    if (thumbsUpClicked == false && thumbsDownClicked == false) {
+      alert("check your vote");
+      return;
+    }
+    if (thumbsUpClicked == true) {
+      setVoted(voteId, 1);
+    } else if (thumbsDownClicked == true) {
+      setVoted(voteId, 2);
+    }
   }
 
   async function sendVoteE(e) {
