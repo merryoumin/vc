@@ -3,6 +3,7 @@ import Toggle from "react-toggle";
 import "react-toggle/style.css";
 import styled from "styled-components";
 import { SHA256, enc } from "crypto-js";
+import axios from "axios";
 
 const ToggleContainer = styled.div`
   display: flex;
@@ -46,19 +47,45 @@ function VoteCreate({ account }) {
   async function sendPoll(e) {
     e.preventDefault();
     let allPoll;
+    let response;
     const data = new FormData(e.target);
     let hash = SHA256(allPoll).toString(enc.Hex);
 
     const title = data.get("title");
     const context = data.get("context");
-    const endTime = data.get("endTime");
+    const _endTime = data.get("endTime");
+
+    const dateObject = new Date(_endTime);
+    const endTime = dateObject.toISOString();
+
     let election = [];
+
+    let typeOfVote = 0;
 
     allPoll = title + context + endTime + account;
 
     if (isOn == true) {
-      election = [0, ...Array.from(data.getAll("election"))];
+      typeOfVote = 1;
+      election = [...Array.from(data.getAll("election"))];
       allPoll = title + context + endTime + account + election;
+    }
+
+    // ${process.env.REACT_APP_BACKEND_URL}
+    try {
+      response = await axios.post(`/api/vote`, {
+        title,
+        context,
+        endTime,
+        account,
+        election,
+        typeOfVote,
+      });
+      console.log(typeOfVote);
+      console.log(election);
+      alert("Complete");
+      // window.location.href = "/";
+    } catch (error) {
+      console.error(error);
     }
 
     // try {
