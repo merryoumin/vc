@@ -2,6 +2,7 @@ import React from "react";
 import Card from "./Card";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { GoCheckCircle, GoCircle, GoCircleSlash } from "react-icons/go";
 
 function VoteList({ account }) {
   const [vote, setVote] = useState([]);
@@ -24,11 +25,39 @@ function VoteList({ account }) {
           .map((_, index) => ({
             key: index,
             frontContent: (
-              <div>
-                <div>{vote[index].title}</div>
-                <div>{vote[index].context}</div>
-                <div>{vote[index].endTime}</div>
-                <div>{vote[index].status}</div>
+              <div className="cardContext items-center justify-center">
+                <div>
+                  {vote[index].status === 0 && (
+                    <div className="flex justify-center items-center ">
+                      <div className="flex justify-center w-28 items-center  border-8 rounded-full">
+                        <GoCircle className="text-8xl text-teal-400" />
+                      </div>
+                    </div>
+                  )}
+                  {vote[index].status === 1 && (
+                    <div className="flex justify-center items-center border-2">
+                      <div className="flex justify-center w-28 items-center  border-8 rounded-full">
+                        <GoCheckCircle className="text-8xl text-teal-400 " />
+                      </div>
+                    </div>
+                  )}
+                  {vote[index].status === 2 && (
+                    <div className=" flex justify-center items-center border-2">
+                      <div className="flex justify-center w-28 items-center  border-8 rounded-full">
+                        <GoCircleSlash className="text-8xl text-teal-400 " />
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="cardContext_title text-center text-2xl">
+                  {vote[index].title}
+                </div>
+                <div className="mt-4">
+                  <div>{vote[index].context}</div>
+                  <div className="mt-2">
+                    {new Date(vote[index].endTime).toLocaleString()}
+                  </div>
+                </div>
               </div>
             ),
             backContent: (
