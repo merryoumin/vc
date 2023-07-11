@@ -1,13 +1,11 @@
+import React, { useState, useEffect } from "react";
 import Toggle from "react-toggle";
-import axios from "axios";
-import Web3 from "web3";
-
 import "react-toggle/style.css";
 import styled from "styled-components";
-
-import React, { useState, useEffect } from "react";
 import { SHA256, enc } from "crypto-js";
+import axios from "axios";
 import { CONTRACT_ABI, CONTRACT_ADDRESS } from "../web3.config";
+import Web3 from "web3";
 
 const web3 = new Web3(window.ethereum);
 const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
@@ -58,20 +56,14 @@ function VoteCreate({ account }) {
   async function getvoteId() {
     try {
       const response = await axios.get(`/api/vote`);
-      setVoteId(response.data.vote);
       console.log(response.data.vote);
-      console.log(voteId);
-      setVid(voteId[voteId.length - 1].id);
+      setVoteId(response.data.vote);
     } catch (error) {
       console.error(error);
     }
   }
 
   async function setPoll() {
-    // console.log("setPoll");
-    // console.log(account);
-    // console.log(vid);
-    // console.log(hash);
     try {
       await contract.methods
         .makePoll(account, vid, hash)
@@ -125,11 +117,12 @@ function VoteCreate({ account }) {
       });
       setHash("0x" + SHA256(allPoll).toString(enc.Hex));
       setCheck(1);
-      window.location.href = "/vote";
+      // window.location.href = "/vote";
     } catch (error) {
       console.error(error);
     }
   }
+
   useEffect(() => {
     if (check == 1) {
       console.log("check 1" + check);
@@ -143,6 +136,10 @@ function VoteCreate({ account }) {
   useEffect(() => {
     setCheck(2);
   }, [vid]);
+
+  useEffect(() => {
+    setVid(voteId?.[voteId.length - 1]?.id);
+  }, [voteId]);
 
   useEffect(() => {
     if (isOn) {

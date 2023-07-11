@@ -19,6 +19,13 @@ function VoteList({ account }) {
   const [thumbsUpClicked, setThumbsUpClicked] = useState(false);
   const [thumbsDownClicked, setThumbsDownClicked] = useState(false);
 
+  const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
+
+  let response;
+  let electionCount;
+  let prosCount;
+  let consCount;
+
   async function voting() {
     try {
       const response = await axios.get(`/api/vote`);
@@ -41,6 +48,7 @@ function VoteList({ account }) {
   }
 
   async function setVoted(_id, _num) {
+    console.log(account);
     try {
       await contract.methods
         .voted(account, _id, _num)
@@ -50,10 +58,32 @@ function VoteList({ account }) {
     }
   }
 
+  const handleSelectChange = (event) => {
+    setSelectedOptionIndex(event.target.value);
+  };
+
+  const setVotedDb = (_id, _num) => async (e) => {
+    e.preventDefault();
+    const data = new FormData(e.target);
+    _id = 74;
+    electionCount = [1];
+    try {
+      response = await axios.put(`/api/vote`, {
+        id: _id,
+        electionCount,
+        prosCount,
+        consCount,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   async function sendVoteA(e) {
     e.preventDefault();
     const data = new FormData(e.target);
     const voteId = data.get("voteId");
+    console.log(account);
     if (thumbsUpClicked == false && thumbsDownClicked == false) {
       alert("check your vote");
       return;
@@ -63,26 +93,21 @@ function VoteList({ account }) {
     } else if (thumbsDownClicked == true) {
       setVoted(voteId, 2);
     }
+    setThumbsUpClicked(false);
+    setThumbsDownClicked(false);
   }
 
   async function sendVoteE(e) {
-    //   e.preventDefault();
-    //   const data = new FormData(e.target);
-    //   const title_a = data.get("title_a");
-    //   const context_a = data.get("context_a");
-    //   const endTime_a = data.get("endTime_a");
-    //   let time = Unix_timestampConv(endTime_a);
-    //   console.log(time);
-    //   let canVoted_a = Array.from(data.getAll("regardingUsers_a"));
-    //   let elective_a = [0, ...Array.from(data.getAll("elective_a"))];
-    //   console.log(elective_a);
-    //   try {
-    //     await contract.methods
-    //       .makeANewPoll(title_a, context_a, 1, elective_a, time, canVoted_a)
-    //       .send({ from: account, to: CONTRACT_ADDRESS });
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
+    e.preventDefault();
+    const data = new FormData(e.target);
+    const voteId = data.get("voteId");
+    console.log(account);
+    console.log("sendVoteE");
+    console.log(voteId);
+    console.log(selectedOptionIndex);
+
+    setVoted(voteId, selectedOptionIndex);
+    // setVoted(voteId, 1);
   }
 
   const cardData =
@@ -180,12 +205,18 @@ function VoteList({ account }) {
                     <form onSubmit={sendVoteE}>
                       <div className="flex justify-center items-center">
                         <div className=" justify-center items-center">
+                          <input
+                            type="hidden"
+                            value={vote[index].id}
+                            name="voteId"
+                          />
                           <select
                             className="select  w-32 h-10 bg-teal-100 rounded-xl  text-center"
                             id={`vote-${index}`}
+                            onChange={handleSelectChange}
                           >
                             {vote[index].election.map((option, optionIndex) => (
-                              <option key={optionIndex} value={option}>
+                              <option key={optionIndex} value={optionIndex}>
                                 {option}
                               </option>
                             ))}
@@ -221,7 +252,10 @@ function VoteList({ account }) {
     fetchData();
   }, []);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    setVotedDb(1, 1);
+    console.log("setVotedDb");
+  }, []);
   return (
     <div>
       {cardData.map((card, index) => (
