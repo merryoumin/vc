@@ -32,8 +32,18 @@ function Contact() {
   return (
     <div className=" justify-center items-center ">
       <div className="contant">
-        <div className="text text-end mr-8 text-4xl text-gray-300">Contact</div>
-        <div className="text text-end mr-8 text-4xl  text-gray-300">Us</div>
+        <div
+          style={{ fontFamily: "Atomy-Bold" }}
+          className="text text-end mr-8 text-6xl text-gray-100"
+        >
+          Contact
+        </div>
+        <div
+          style={{ fontFamily: "Atomy-Bold" }}
+          className="text text-end mr-8 text-6xl  text-gray-100"
+        >
+          Us
+        </div>
         <form ref={form} onSubmit={sendEmail}>
           <div>
             <div>
