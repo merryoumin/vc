@@ -53,6 +53,10 @@ input {
   background-repeat: round;
   z-index: 1 !important;
 }
+.contact {
+  width: 135vw !important;
+  height: 150vh !important;
+}
 
 .main {
   width: 99vw !important;
