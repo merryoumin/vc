@@ -1,5 +1,6 @@
 import React from "react";
 import Card from "./Card";
+import Card2 from "./Card2";
 import axios from "axios";
 import Web3 from "web3";
 
@@ -12,9 +13,14 @@ const web3 = new Web3(window.ethereum);
 const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
 
 function VoteList({ account }) {
+  const currentTime = new Date();
+
   const [vote, setVote] = useState([]);
   const [id, setId] = useState();
   const [hash, setHash] = useState();
+  const [getVoted, setGetVoted] = useState(0);
+
+  const [vid, setVid] = useState();
 
   const [thumbsUpClicked, setThumbsUpClicked] = useState(false);
   const [thumbsDownClicked, setThumbsDownClicked] = useState(false);
@@ -22,16 +28,12 @@ function VoteList({ account }) {
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
 
   let response;
-  let electionCount;
-  let prosCount;
-  let consCount;
 
   async function voting() {
     try {
       const response = await axios.get(`/api/vote`);
 
       setVote(response.data.vote);
-      console.log(response.data.vote);
     } catch (error) {
       console.error(error);
     }
@@ -41,14 +43,12 @@ function VoteList({ account }) {
     try {
       const response = await contract.methods.getPoll(_id).call();
       setHash(response);
-      console.log(hash);
     } catch (error) {
       console.error(error);
     }
   }
 
   async function setVoted(_id, _num) {
-    console.log(account);
     try {
       await contract.methods
         .voted(account, _id, _num)
@@ -62,52 +62,133 @@ function VoteList({ account }) {
     setSelectedOptionIndex(event.target.value);
   };
 
-  const setVotedDb = (_id, _num) => async (e) => {
-    e.preventDefault();
-    const data = new FormData(e.target);
-    _id = 74;
-    electionCount = [1];
+  async function getVotedfun(_id) {
+    console.log("getVotedfun");
+    console.log("account : " + account);
+    console.log("id " + _id);
+    let getResponse;
     try {
-      response = await axios.put(`/api/vote`, {
-        id: _id,
-        electionCount,
-        prosCount,
-        consCount,
-      });
+      getResponse = await contract.methods.getVoted(account, _id).call();
+      console.log(Number(getResponse));
+      setGetVoted(Number(getResponse));
+      console.log(getResponse);
+      console.log("getVotedfun2");
+      console.log("account : " + account);
+      console.log("id " + _id);
     } catch (error) {
       console.error(error);
     }
-  };
+    console.log("getVotedfun");
+    console.log("account : " + account);
+    console.log("id " + _id);
+    return Number(getResponse);
+  }
 
   async function sendVoteA(e) {
     e.preventDefault();
     const data = new FormData(e.target);
+
     const voteId = data.get("voteId");
-    console.log(account);
+    let prosCount = [...data.getAll("prosCount")].map(Number);
+    let consCount = [...data.getAll("consCount")].map(Number);
+    let electionCount = [...data.getAll("electionCount")].map(String);
+
+    console.log("voteId" + voteId);
+    console.log(prosCount);
+    console.log(consCount);
+    console.log(electionCount);
+
+    console.log(typeof prosCount);
+    console.log(typeof consCount);
+    console.log(typeof electionCount);
+
+    console.log(typeof prosCount[0]);
+    console.log(typeof consCount[0]);
+    console.log(typeof electionCount[0]);
+
+    let prosCountA = [];
+    let consCountA = [];
+    let electionCountA = [];
     if (thumbsUpClicked == false && thumbsDownClicked == false) {
       alert("check your vote");
       return;
     }
     if (thumbsUpClicked == true) {
+      prosCountA.push((prosCount[0] = String(parseInt(prosCount[0]) + 1)));
+      setDB(voteId, electionCountA, prosCountA, consCountA);
       setVoted(voteId, 1);
     } else if (thumbsDownClicked == true) {
+      consCountA.push((consCount[0] = String(parseInt(consCount[0]) + 1)));
+      setDB(voteId, electionCountA, prosCountA, consCountA);
       setVoted(voteId, 2);
     }
     setThumbsUpClicked(false);
     setThumbsDownClicked(false);
   }
 
+  // async function setDB(id, electionCount, prosCount, consCount) {
+  //   try {
+  //     console.log("setDB");
+  //     // const id = 44;
+  //     // const electionCount = ["1"];
+  //     // const prosCount = [1];
+  //     // const consCount = [1];
+
+  //     const response = await axios.put(`/api/vote`, {
+  //       id,
+  //       electionCount,
+  //       prosCount,
+  //       consCount,
+  //     });
+  //     if (response.data.ok) {
+  //       console.log(response.data.ok);
+  //       console.log(response.data);
+  //       console.log("Vote data saved successfully.");
+  //     } else {
+  //       console.error(
+  //         "An error occurred while saving vote data:",
+  //         response.data.error
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
+
+  async function setDB(id, electionCount, prosCount, consCount) {
+    try {
+      const data = {
+        id,
+        electionCount,
+        prosCount,
+        consCount,
+      };
+
+      const response = await axios.put(`/api/vote`, data);
+
+      if (response.data.ok) {
+        console.log(response.data.ok);
+        console.log(response.data);
+        console.log("Vote data saved successfully.");
+      } else {
+        console.error(
+          "An error occurred while saving vote data:",
+          response.data.error
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async function sendVoteE(e) {
     e.preventDefault();
     const data = new FormData(e.target);
+    const electionCount = data.get("electionCount");
+    const select = data.get("select");
+    const selected = data.get("selected");
     const voteId = data.get("voteId");
-    console.log(account);
-    console.log("sendVoteE");
-    console.log(voteId);
-    console.log(selectedOptionIndex);
-
     setVoted(voteId, selectedOptionIndex);
-    // setVoted(voteId, 1);
   }
 
   const cardData =
@@ -119,27 +200,29 @@ function VoteList({ account }) {
             frontContent: (
               <div className="cardContext items-center justify-center">
                 <div>
-                  {vote[index].status === 0 && (
+                  {currentTime < new Date(vote[index].endTime) && (
                     <div className="flex justify-center items-center ">
                       <div className="flex justify-center w-28 items-center  border-8 rounded-full">
                         <GoCircle className="text-8xl text-teal-400" />
                       </div>
                     </div>
                   )}
-                  {vote[index].status === 1 && (
-                    <div className="flex justify-center items-center border-2">
-                      <div className="flex justify-center w-28 items-center  border-8 rounded-full">
-                        <GoCheckCircle className="text-8xl text-teal-400 " />
+                  {currentTime > new Date(vote[index].endTime) && (
+                    <div className="flex justify-center items-center">
+                      <div className="flex justify-center w-28 items-center border-8 rounded-full">
+                        <GoCircleSlash className="text-8xl text-teal-400" />
                       </div>
                     </div>
                   )}
-                  {vote[index].status === 2 && (
-                    <div className=" flex justify-center items-center border-2">
-                      <div className="flex justify-center w-28 items-center  border-8 rounded-full">
-                        <GoCircleSlash className="text-8xl text-teal-400 " />
+                  <div>
+                    {/* {getVotedfun(vote[index].id) !== 0 && (
+                      <div className="flex justify-center items-center">
+                        <div className="flex justify-center w-28 items-center border-8 rounded-full">
+                          <GoCheckCircle className="text-8xl text-teal-400" />
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )} */}
+                  </div>
                 </div>
                 <div className="cardContext_title text-center text-2xl">
                   {vote[index].title}
@@ -160,6 +243,7 @@ function VoteList({ account }) {
                 <div className="mt-4">
                   {vote[index].typeOfVote === 0 && (
                     <form onSubmit={sendVoteA}>
+                      {vote[index].id}
                       <div className=" flex justify-center items-center">
                         <div className="flex justify-center w-28 items-center">
                           <div className="m-6">
@@ -167,6 +251,21 @@ function VoteList({ account }) {
                               type="hidden"
                               value={vote[index].id}
                               name="voteId"
+                            />
+                            <input
+                              type="hidden"
+                              value={vote[index].electionCount}
+                              name="electionCount"
+                            />
+                            <input
+                              type="hidden"
+                              value={vote[index].consCount}
+                              name="consCount"
+                            />
+                            <input
+                              type="hidden"
+                              value={vote[index].prosCount}
+                              name="prosCount"
                             />
                             <FaThumbsUp
                               onClick={() => {
@@ -203,6 +302,7 @@ function VoteList({ account }) {
                   )}
                   {vote[index].typeOfVote === 1 && (
                     <form onSubmit={sendVoteE}>
+                      {vote[index].id}
                       <div className="flex justify-center items-center">
                         <div className=" justify-center items-center">
                           <input
@@ -210,13 +310,33 @@ function VoteList({ account }) {
                             value={vote[index].id}
                             name="voteId"
                           />
+                          <input
+                            type="hidden"
+                            value={vote[index].electionCount}
+                            name="electionCount"
+                          />
+                          <input
+                            type="hidden"
+                            value={vote[index].consCount}
+                            name="consCount"
+                          />
+                          <input
+                            type="hidden"
+                            value={vote[index].prosCount}
+                            name="prosCount"
+                          />
                           <select
                             className="select  w-32 h-10 bg-teal-100 rounded-xl  text-center"
                             id={`vote-${index}`}
+                            name="select"
                             onChange={handleSelectChange}
                           >
                             {vote[index].election.map((option, optionIndex) => (
-                              <option key={optionIndex} value={optionIndex}>
+                              <option
+                                name="selected"
+                                key={optionIndex}
+                                value={optionIndex}
+                              >
                                 {option}
                               </option>
                             ))}
@@ -230,7 +350,6 @@ function VoteList({ account }) {
                       </div>
                     </form>
                   )}
-
                   <div className="mt-2 text-center">{vote[index].context}</div>
                   <div className="mt-2 text-center">
                     {new Date(vote[index].endTime).toLocaleString()}
@@ -253,9 +372,12 @@ function VoteList({ account }) {
   }, []);
 
   useEffect(() => {
-    setVotedDb(1, 1);
-    console.log("setVotedDb");
-  }, []);
+    getVotedfun(44);
+  }, [account]);
+
+  useEffect(() => {
+    getVotedfun(id);
+  }, [id]);
   return (
     <div>
       {cardData.map((card, index) => (

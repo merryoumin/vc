@@ -89,8 +89,8 @@ function VoteCreate({ account }) {
 
     let election = [];
     let electionCount = [];
-    let prosCount = [];
-    let consCount = [];
+    let prosCount = [0];
+    let consCount = [0];
 
     let typeOfVote = 0;
 
@@ -98,7 +98,14 @@ function VoteCreate({ account }) {
 
     if (isOn == true) {
       typeOfVote = 1;
-      election = [...Array.from(data.getAll("election"))];
+      const electionValues = Array.from(data.getAll("election"));
+      election = [0, ...electionValues];
+      electionCount = Array(election.length).fill(0);
+
+      for (let i; i < election.length; i++) {
+        electionCount.push(0);
+      }
+
       allPoll = title + context + endTime + account + election;
     }
 

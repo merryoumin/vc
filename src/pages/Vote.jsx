@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
 import VoteList from "../components/VoteList";
+import VoteList2 from "../components/VoteList2";
 import VoteCreate from "../components/VoteCreate";
 
 function Vote({ account }) {
   const [showList, setShowList] = useState(true);
+  const [showList2, setShowList2] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
   const handleListButtonClick = () => {
     setShowList(true);
+    setShowList2(false);
+    setShowCreate(false);
+  };
+  const handleListButtonClick2 = () => {
+    setShowList(false);
+    setShowList2(true);
     setShowCreate(false);
   };
   const handleCreateButtonClick = () => {
     setShowList(false);
+    setShowList2(false);
     setShowCreate(true);
   };
   return (
@@ -35,6 +44,15 @@ function Vote({ account }) {
           <button
             style={{ fontFamily: "text" }}
             className={`bg-gray-300 w-24 hover:bg-teal-200 text-white text-lg py-3 px-6 rounded-t-2xl ${
+              showList2 ? "bg-teal-200" : ""
+            }`}
+            onClick={handleListButtonClick2}
+          >
+            Result
+          </button>
+          <button
+            style={{ fontFamily: "text" }}
+            className={`bg-gray-300 w-24 hover:bg-teal-200 text-white text-lg py-3 px-6 rounded-t-2xl ${
               showCreate ? "bg-teal-200" : ""
             }`}
             onClick={handleCreateButtonClick}
@@ -45,6 +63,7 @@ function Vote({ account }) {
       </div>
       <div className=" w-screen   flex items-start justify-center bg-gray-50 p-4">
         {showList && <VoteList account={account} />}
+        {showList2 && <VoteList2 account={account} />}
         {showCreate && <VoteCreate account={account} />}
       </div>
     </div>
