@@ -53,11 +53,15 @@ input {
   background-repeat: round;
   z-index: 1 !important;
 }
-.contact {
-  width: 135vw !important;
-  height: 150vh !important;
+.contactPic {
+  width: 128vw !important;
+  max-width: 98%;
+  height: 28vh;
 }
-
+.contant {
+  margin-left: 50px;
+  margin-top: 50px;
+}
 .main {
   width: 99vw !important;
   height: 74vh !important;
