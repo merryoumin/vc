@@ -29,6 +29,7 @@ function App() {
   };
 
   useEffect(() => {
+    alert("hello");
     if (
       account !== "" &&
       account !== localStorage.getItem("address") &&
@@ -38,6 +39,7 @@ function App() {
     ) {
       alert("Please connect in the normal way.");
     }
+    alert("in");
   }, []);
 
   return (
