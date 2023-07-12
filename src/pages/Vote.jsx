@@ -61,7 +61,13 @@ function Vote({ account }) {
           </button>
         </div>
       </div>
-      <div className=" w-screen   flex items-start justify-center bg-gray-50 p-4">
+      {/* <img
+        // className="h-screen w-screen"
+        className="h-screen w-screen voteMain"
+        src={process.env.PUBLIC_URL + "images/about_f.gif"}
+        alt="Example"
+      /> */}
+      <div className="voteMain w-screen  voteContant flex items-start justify-center p-4">
         {showList && <VoteList account={account} />}
         {showList2 && <VoteList2 account={account} />}
         {showCreate && <VoteCreate account={account} />}

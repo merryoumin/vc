@@ -88,6 +88,28 @@ function VoteList2({ account }) {
     }
     return Number(getResponse);
   }
+  const fetchVotedResultFun = async () => {
+    const status = await Promise.all(
+      vote.map(async (item) => {
+        const electionLength = item.election.length;
+        const electionIndices = Array.from(
+          { length: electionLength },
+          (_, index) => index + 1
+        );
+        console.log("item");
+        console.log(item);
+        console.log(item.id);
+
+        const results = await Promise.all(
+          electionIndices.map((index) => getVotedRe(item.id, index))
+        );
+        console.log("results");
+        console.log(results);
+        return setResults(results);
+      })
+    );
+    console.log(status);
+  };
 
   useEffect(() => {
     const fetchVotedStatus = async () => {
@@ -101,30 +123,7 @@ function VoteList2({ account }) {
   }, [vote]);
 
   useEffect(() => {
-    const fetchVotedResult = async () => {
-      const status = await Promise.all(
-        vote.map(async (item) => {
-          const electionLength = item.election.length;
-          const electionIndices = Array.from(
-            { length: electionLength },
-            (_, index) => index + 1
-          );
-          console.log("item");
-          console.log(item);
-          console.log(item.id);
-
-          const results = await Promise.all(
-            electionIndices.map((index) => getVotedRe(item.id, index))
-          );
-          console.log("results");
-          console.log(results);
-          return setResults(results);
-        })
-      );
-      console.log(status);
-    };
-
-    fetchVotedResult();
+    fetchVotedResultFun();
   }, [vote]);
 
   const cardData =
@@ -137,8 +136,10 @@ function VoteList2({ account }) {
               <div className="cardContext items-center justify-center">
                 <div className="cardContext_title rounded-full bg-emerald-100 text-center text-xl">
                   {vote[index].title}
+
                   {vote[index].typeOfVote === 0 && (
-                    <div className="flex justify-center  text-4xl items-center">
+                    <div className="justify-center  text-4xl items-center">
+                      <div className="text-xs">내가 한 투표</div>
                       <div className=" justify-center text-gray-600 items-center">
                         {votedStatus[index] === 1 && <div> 찬성 </div>}
                       </div>
@@ -151,7 +152,8 @@ function VoteList2({ account }) {
                     </div>
                   )}
                   {vote[index].typeOfVote === 1 && (
-                    <div className="flex justify-center items-center">
+                    <div className="justify-center items-center">
+                      <div className="text-xs">내가 한 투표</div>
                       <div className=" justify-center text-gray-600  text-4xl  items-center">
                         {vote[index].typeOfVote !== 0 && (
                           <div>{vote[index].election[votedStatus[index]]}</div>
@@ -185,17 +187,36 @@ function VoteList2({ account }) {
                 )}
                 {currentTime > new Date(vote[index].endTime) && (
                   <div className="justify-center items-center ">
-                    <div className="justify-center  text-gray-500  text-xl text-center bg-white items-center  border-8 rounded-full">
-                      {vote[index].id}
-                    </div>
-                    <div className="justify-center  text-gray-500  text-xl text-center bg-white items-center  border-8 rounded-full">
-                      <div className="justify-center text-gray-500 text-xl text-center bg-white items-center border-8 rounded-full">
-                        {results.indexOf(Math.max(...results)) ===
-                          vote.findIndex(
-                            (item) => item.election === vote[index].election
-                          ) && <div>{vote[index].election}</div>}
+                    <div className="justify-center  text-gray-500  rounded-3xl  text-xl text-center m-8  bg-white items-center  border-8 ">
+                      <div>
+                        <div className="text-gray-500 m-4 text-2xl">
+                          {vote[index].title}
+                        </div>
+                        <div className="text-gray-500  m-4  text-xl">
+                          {vote[index].context}
+                        </div>
+                        <div>결과</div>
+                        {vote[index].typeOfVote === 0 && (
+                          <div className="text-gray-500  m-4 text-4xl ">
+                            {results.indexOf(Math.max(...results)) === 1
+                              ? "찬성"
+                              : "반대"}
+                          </div>
+                        )}
+                        {vote[index].typeOfVote === 1 && (
+                          <div className="text-gray-500  m-4 text-4xl ">
+                            {
+                              vote[index].election[
+                                results.indexOf(Math.max(...results))
+                              ]
+                            }
+                          </div>
+                        )}
                       </div>
-                      <div> {Math.max(...results)}</div>
+                      <div className="text-center"> 득표수</div>
+                      <div className="text-center text-4xl">
+                        {Math.max(...results)}
+                      </div>
                     </div>
                   </div>
                 )}

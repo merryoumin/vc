@@ -56,5 +56,5 @@
     "crypto": false,
     "stream": false
   },
-  "proxy": "https://db-vc.vercel.app/"
+  "proxy": "http://localhost:3000"
 }

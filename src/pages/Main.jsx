@@ -9,7 +9,16 @@ function Main() {
     }
   }, []);
 
-  return <div>MAIN!</div>;
+  return (
+    <div className="flex justify-center items-end ">
+      <img
+        // className="h-screen w-screen"
+        className="h-screen w-screen main"
+        src={process.env.PUBLIC_URL + "images/1234.gif"}
+        alt="mainPic"
+      />
+    </div>
+  );
 }
 
 export default Main;

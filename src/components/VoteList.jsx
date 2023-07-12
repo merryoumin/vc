@@ -243,7 +243,6 @@ function VoteList({ account }) {
                 <div className="mt-4">
                   {vote[index].typeOfVote === 0 && (
                     <form onSubmit={sendVoteA}>
-                      {vote[index].id}
                       <div className=" flex justify-center items-center">
                         <div className="flex justify-center w-28 items-center">
                           <div className="m-6">

@@ -156,7 +156,7 @@ function VoteCreate({ account }) {
   }, [isOn]);
 
   return (
-    <div className="w-screen border-8 border-gray-100  flex flex-col justify-center items-center">
+    <div className="w-screen border-8 bg-white rounded-3xl border-gray-100  flex flex-col justify-center items-center">
       <div>
         <form onSubmit={sendPoll}>
           <div className="mt-10">
