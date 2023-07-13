@@ -124,7 +124,7 @@ function VoteCreate({ account }) {
       });
       setHash("0x" + SHA256(allPoll).toString(enc.Hex));
       setCheck(1);
-      // window.location.href = "/vote";
+      window.location.href = "/vote";
     } catch (error) {
       console.error(error);
     }
@@ -221,7 +221,7 @@ function VoteCreate({ account }) {
           </Desc>
           <div>
             <div className="text-center mt-8 mb-4">투표 기간</div>
-            <input type="date" name="endTime" />
+            <input type="datetime-local" name="endTime" />
           </div>
           <div className="alrm p-5 mt-10  bg-white rounded-3xl">
             한번 만드신 투표는 수정 될 수 없습니다. 또한 투표의 모든 내용은

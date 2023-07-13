@@ -301,7 +301,7 @@ function VoteList({ account }) {
                   )}
                   {vote[index].typeOfVote === 1 && (
                     <form onSubmit={sendVoteE}>
-                      {vote[index].id}
+                      {/* {vote[index].id} */}
                       <div className="flex justify-center items-center">
                         <div className=" justify-center items-center">
                           <input
@@ -336,6 +336,7 @@ function VoteList({ account }) {
                                 key={optionIndex}
                                 value={optionIndex}
                               >
+                                {optionIndex}
                                 {option}
                               </option>
                             ))}

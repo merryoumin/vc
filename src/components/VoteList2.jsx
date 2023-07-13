@@ -71,6 +71,7 @@ function VoteList2({ account }) {
     try {
       getResponse = await contract.methods.getVoted(account, _id).call();
       setGetVoted(Number(getResponse));
+      console.log(Number(getResponse));
     } catch (error) {
       console.error(error);
     }
@@ -103,6 +104,7 @@ function VoteList2({ account }) {
         const results = await Promise.all(
           electionIndices.map((index) => getVotedRe(item.id, index))
         );
+        results.unshift(0);
         console.log("results");
         console.log(results);
         return setResults(results);
@@ -198,13 +200,14 @@ function VoteList2({ account }) {
                         <div>결과</div>
                         {vote[index].typeOfVote === 0 && (
                           <div className="text-gray-500  m-4 text-4xl ">
-                            {results.indexOf(Math.max(...results)) === 1
-                              ? "찬성"
-                              : "반대"}
+                            {results[0] === 1 ? "찬성" : "반대"}
                           </div>
                         )}
                         {vote[index].typeOfVote === 1 && (
                           <div className="text-gray-500  m-4 text-4xl ">
+                            {/* {results} */}
+                            {/* {results.indexOf(Math.max(...results))} */}
+                            {/* {vote[index].election[1]} */}
                             {
                               vote[index].election[
                                 results.indexOf(Math.max(...results))

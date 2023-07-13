@@ -62,7 +62,7 @@ function About({ account }) {
         </div>
         <div className="mr-8 h-45">
           <a
-            href="https://github.com/merryoumin"
+            href="https://github.com/WhiteNetSource"
             target="_blank"
             rel="noopener noreferrer"
           >

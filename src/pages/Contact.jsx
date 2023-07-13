@@ -17,6 +17,8 @@ function Contact() {
       .then(
         (result) => {
           console.log(result.text);
+          alert("이메일이 성공적으로 보내졌습니다.");
+          window.location.href = "/";
         },
         (error) => {
           console.log(error.text);
