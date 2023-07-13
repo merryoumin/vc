@@ -23,12 +23,11 @@ function VoteList2({ account }) {
 
   const [vid, setVid] = useState();
   const [votedStatus, setVotedStatus] = useState([]);
-
+  const [sum, setSum] = useState();
   const [fetchVotedResult, setfetchVotedResult] = useState([]);
 
   const [thumbsUpClicked, setThumbsUpClicked] = useState(false);
   const [thumbsDownClicked, setThumbsDownClicked] = useState(false);
-
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
 
   let response;
@@ -107,6 +106,8 @@ function VoteList2({ account }) {
         results.unshift(0);
         console.log("results");
         console.log(results);
+        const _sum = results.reduce((acc, val) => acc + parseInt(val), 0);
+        setSum(_sum);
         return setResults(results);
       })
     );
@@ -216,9 +217,17 @@ function VoteList2({ account }) {
                           </div>
                         )}
                       </div>
-                      <div className="text-center"> 득표수</div>
-                      <div className="text-center text-4xl">
-                        {Math.max(...results)}
+                      <div className="flex justify-center items-center">
+                        <div className="m-4">
+                          <div className="text-center text-sm"> 득표수</div>
+                          <div className="text-center text-4xl">
+                            {Math.max(...results)}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-center text-sm"> 총투표수</div>
+                          <div className="text-center text-4xl">{sum}</div>
+                        </div>
                       </div>
                     </div>
                   </div>

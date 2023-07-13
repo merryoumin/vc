@@ -69,7 +69,7 @@ input {
 
 .voteMain {
   object-fit: cover;
-  height: 10400px !important;
+  height: 300vh !important;
   width: 47vh !important;
   padding-top: 100px;
   background-image: url("../public/images/about_f.gif");

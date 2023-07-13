@@ -24,7 +24,7 @@ function VoteList({ account }) {
 
   const [thumbsUpClicked, setThumbsUpClicked] = useState(false);
   const [thumbsDownClicked, setThumbsDownClicked] = useState(false);
-
+  const [voteChack, setVoteChack] = useState();
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
 
   let response;
@@ -39,6 +39,16 @@ function VoteList({ account }) {
     }
   }
 
+  async function getVotedfun(_id) {
+    let getResponse;
+    try {
+      getResponse = await contract.methods.getVoted(account, _id).call();
+      console.log(Number(getResponse));
+    } catch (error) {
+      console.error(error);
+    }
+    return Number(getResponse);
+  }
   async function getPoll(_id) {
     try {
       const response = await contract.methods.getPoll(_id).call();
@@ -49,6 +59,10 @@ function VoteList({ account }) {
   }
 
   async function setVoted(_id, _num) {
+    if (getVotedfun(_id) !== 0) {
+      alert("이미 투표 하셨습니다.");
+      return;
+    }
     try {
       await contract.methods
         .voted(account, _id, _num)
@@ -236,129 +250,153 @@ function VoteList({ account }) {
               </div>
             ),
             backContent: (
-              <div className="cardContext items-center justify-center">
-                <div className="cardContext_title text-center text-2xl">
-                  {vote[index].title}
-                </div>
-                <div className="mt-4">
-                  {vote[index].typeOfVote === 0 && (
-                    <form onSubmit={sendVoteA}>
-                      <div className=" flex justify-center items-center">
-                        <div className="flex justify-center w-28 items-center">
-                          <div className="m-6">
-                            <input
-                              type="hidden"
-                              value={vote[index].id}
-                              name="voteId"
-                            />
-                            <input
-                              type="hidden"
-                              value={vote[index].electionCount}
-                              name="electionCount"
-                            />
-                            <input
-                              type="hidden"
-                              value={vote[index].consCount}
-                              name="consCount"
-                            />
-                            <input
-                              type="hidden"
-                              value={vote[index].prosCount}
-                              name="prosCount"
-                            />
-                            <FaThumbsUp
-                              onClick={() => {
-                                setThumbsUpClicked(!thumbsUpClicked);
-                                if (thumbsDownClicked)
-                                  setThumbsDownClicked(false);
-                              }}
-                              className={`text-6xl ${
-                                thumbsUpClicked ? "text-teal-300" : "text-white"
-                              }`}
-                            />
-                          </div>
-                          <input
-                            type="submit"
-                            value="VOTE"
-                            className="text-center  w-20 btmSum h-14 "
-                          />
-                          <div className="m-6">
-                            <FaThumbsDown
-                              onClick={() => {
-                                setThumbsDownClicked(!thumbsDownClicked);
-                                if (thumbsUpClicked) setThumbsUpClicked(false);
-                              }}
-                              className={`text-6xl ${
-                                thumbsDownClicked
-                                  ? "text-teal-300"
-                                  : "text-white"
-                              }`}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </form>
-                  )}
-                  {vote[index].typeOfVote === 1 && (
-                    <form onSubmit={sendVoteE}>
-                      {/* {vote[index].id} */}
-                      <div className="flex justify-center items-center">
-                        <div className=" justify-center items-center">
-                          <input
-                            type="hidden"
-                            value={vote[index].id}
-                            name="voteId"
-                          />
-                          <input
-                            type="hidden"
-                            value={vote[index].electionCount}
-                            name="electionCount"
-                          />
-                          <input
-                            type="hidden"
-                            value={vote[index].consCount}
-                            name="consCount"
-                          />
-                          <input
-                            type="hidden"
-                            value={vote[index].prosCount}
-                            name="prosCount"
-                          />
-                          <select
-                            className="select  w-32 h-10 bg-teal-100 rounded-xl  text-center"
-                            id={`vote-${index}`}
-                            name="select"
-                            onChange={handleSelectChange}
-                          >
-                            {vote[index].election.map((option, optionIndex) => (
-                              <option
-                                name="selected"
-                                key={optionIndex}
-                                value={optionIndex}
-                              >
-                                {optionIndex}
-                                {option}
-                              </option>
-                            ))}
-                          </select>
-                          <input
-                            type="submit"
-                            value="VOTE"
-                            className="text-center  w-20 ml-3 btmSum h-14 "
-                          />
-                        </div>
-                      </div>
-                    </form>
-                  )}
-                  <div className="mt-2 text-center">{vote[index].context}</div>
-                  <div className="mt-2 text-center">
-                    {new Date(vote[index].endTime).toLocaleString()}
-                    <div className="mt-2 text-xs">
-                      한번 투표 하신 투표는 수정 될 수 없습니다.
+              <>
+                {currentTime > new Date(vote[index].endTime) && (
+                  <div className="justify-center items-center ">
+                    <div className="justify-center  text-gray-500  text-xl text-center bg-white items-center  border-8 rounded-full">
+                      이 투표는 완료 되었습니다.
+                    </div>
+                    <div className="justify-center text-gray-500 font-medium  m-2 p-12 bg-emerald-100 text-center text-4xl items-center  border-8 rounded-full">
+                      투표가 불가 합니다.
                     </div>
                   </div>
-                </div>
-              </div>
+                )}
+                {currentTime < new Date(vote[index].endTime) && (
+                  <div className="cardContext items-center justify-center">
+                    <div className="cardContext_title text-center text-2xl">
+                      {vote[index].title}
+                    </div>
+                    <div className="mt-4">
+                      {vote[index].typeOfVote === 0 && (
+                        <form onSubmit={sendVoteA}>
+                          <div className=" flex justify-center items-center">
+                            <div className="flex justify-center w-28 items-center">
+                              <div className="m-6">
+                                <input
+                                  type="hidden"
+                                  value={vote[index].id}
+                                  name="voteId"
+                                />
+                                <input
+                                  type="hidden"
+                                  value={vote[index].electionCount}
+                                  name="electionCount"
+                                />
+                                <input
+                                  type="hidden"
+                                  value={vote[index].consCount}
+                                  name="consCount"
+                                />
+                                <input
+                                  type="hidden"
+                                  value={vote[index].prosCount}
+                                  name="prosCount"
+                                />
+                                <FaThumbsUp
+                                  onClick={() => {
+                                    setThumbsUpClicked(!thumbsUpClicked);
+                                    if (thumbsDownClicked)
+                                      setThumbsDownClicked(false);
+                                  }}
+                                  className={`text-6xl ${
+                                    thumbsUpClicked
+                                      ? "text-teal-300"
+                                      : "text-white"
+                                  }`}
+                                />
+                              </div>
+                              <input
+                                type="submit"
+                                value="VOTE"
+                                className="text-center  w-20 btmSum h-14 "
+                              />
+                              <div className="m-6">
+                                <FaThumbsDown
+                                  onClick={() => {
+                                    setThumbsDownClicked(!thumbsDownClicked);
+                                    if (thumbsUpClicked)
+                                      setThumbsUpClicked(false);
+                                  }}
+                                  className={`text-6xl ${
+                                    thumbsDownClicked
+                                      ? "text-teal-300"
+                                      : "text-white"
+                                  }`}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+                      )}
+                      {vote[index].typeOfVote === 1 && (
+                        <form onSubmit={sendVoteE}>
+                          {/* {vote[index].id} */}
+                          <div className="flex justify-center items-center">
+                            <div className=" justify-center items-center">
+                              <input
+                                type="hidden"
+                                value={vote[index].id}
+                                name="voteId"
+                              />
+                              <input
+                                type="hidden"
+                                value={vote[index].electionCount}
+                                name="electionCount"
+                              />
+                              <input
+                                type="hidden"
+                                value={vote[index].consCount}
+                                name="consCount"
+                              />
+                              <input
+                                type="hidden"
+                                value={vote[index].prosCount}
+                                name="prosCount"
+                              />
+                              <select
+                                className="select  w-32 h-10 bg-teal-100 rounded-xl  text-center"
+                                id={`vote-${index}`}
+                                name="select"
+                                onChange={handleSelectChange}
+                              >
+                                {vote[index].election.map(
+                                  (option, optionIndex) => (
+                                    <option
+                                      name="selected"
+                                      key={optionIndex}
+                                      value={optionIndex}
+                                    >
+                                      {option === 0 ? (
+                                        <div>선택해주세요</div>
+                                      ) : (
+                                        option
+                                      )}
+                                    </option>
+                                  )
+                                )}
+                              </select>
+                              <input
+                                type="submit"
+                                value="VOTE"
+                                className="text-center  w-20 ml-3 btmSum h-14 "
+                              />
+                            </div>
+                          </div>
+                        </form>
+                      )}
+                      <div className="mt-2 text-center">
+                        {vote[index].context}
+                      </div>
+                      <div className="mt-2 text-center">
+                        {new Date(vote[index].endTime).toLocaleString()}
+                        <div className="mt-2 text-xs">
+                          한번 투표 하신 투표는 수정 될 수 없습니다.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
             ),
           }))
       : [];
